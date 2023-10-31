@@ -4,7 +4,9 @@ This is a Python library for interacting with Pixeldrain, a simple file sharing 
 
 ## Installation
 
-soon
+```bash
+pip install pixeldrain-reloaded
+```
 
 ## Documentation
 
