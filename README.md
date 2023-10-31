@@ -47,14 +47,20 @@ Download a file from Pixeldrain synchronously.
 
 The asynchronous version of the library provides the same functionality but is designed for use with `asyncio` and `aiohttp` for non-blocking asynchronous operations.
 
-## Usage/Examples
+## Usage
 
 ### Synchronous Version
+
+#### Import the library
+
+```python
+import pixeldrain_reloaded as pixeldrain
+```
 
 #### Get Information about a File
 
 ```python
-file_info = pixeldrain.get_info(file_id="your_file_id")
+file_info = pixeldrain.Sync.get_info(file_id="your_file_id")
 print(file_info)
 ```
 
@@ -62,7 +68,7 @@ print(file_info)
 
 ```python
 file_path = "path/to/your/file.txt"
-response = pixeldrain.upload_file(file_path, returns="dict", filename="custom_filename", api_key="your_api_key")
+response = pixeldrain.Sync.upload_file(file_path, returns="dict", filename="custom_filename", api_key="your_api_key")
 print(response)
 ```
 
@@ -71,16 +77,22 @@ print(response)
 ```python
 file_id = "your_file_id"
 download_path = "path/to/download"
-downloaded_file = pixeldrain.download_file(file_id, download_path, filename="custom_filename")
+downloaded_file = pixeldrain.Sync.download_file(file_id, download_path, filename="custom_filename")
 print(f"File downloaded to: {downloaded_file}")
 ```
 
 ### Asynchronous Version
 
+#### Import the library
+
+```python
+import pixeldrain_reloaded as pixeldrain
+```
+
 #### Get Information about a File (Async)
 
 ```python
-file_info = await async_pixeldrain.get_info(file_id="your_file_id")
+file_info = await pixeldrain.Async.get_info(file_id="your_file_id")
 print(file_info)
 ```
 
@@ -88,7 +100,7 @@ print(file_info)
 
 ```python
 file_path = "path/to/your/file.txt"
-response = await async_pixeldrain.upload_file(file_path, returns="dict", filename="custom_filename", api_key="your_api_key")
+response = await pixeldrain.Async.upload_file(file_path, returns="dict", filename="custom_filename", api_key="your_api_key")
 print(response)
 ```
 
@@ -97,7 +109,7 @@ print(response)
 ```python
 file_id = "your_file_id"
 download_path = "path/to/download"
-downloaded_file = await async_pixeldrain.download_file(file_id, download_path, filename="custom_filename")
+downloaded_file = await pixeldrain.Async.download_file(file_id, download_path, filename="custom_filename")
 print(f"File downloaded to: {downloaded_file}")
 ```
 
