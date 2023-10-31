@@ -6,7 +6,48 @@ This is a Python library for interacting with Pixeldrain, a simple file sharing 
 
 soon
 
-## Usage
+## Documentation
+
+### `get_info(file_id)`
+
+Get information about a file on Pixeldrain.
+
+- Parameters:
+  - `file_id` (str): The ID of the file.
+
+- Returns:
+  - `dict`: A dictionary containing file information.
+
+### `upload_file(file_path, returns=None, filename=None, api_key=None)`
+
+Upload a file to Pixeldrain synchronously.
+
+- Parameters:
+  - `file_path` (str): The path to the file to be uploaded.
+  - `returns` (str, optional): Specifies what to return.
+  - `filename` (str, optional): Name of the file to upload.
+  - `api_key` (str, optional): Pixeldrain API key for authorized uploads.
+
+- Returns:
+  - `dict` or `str`: Depending on the 'returns' parameter, returns a dictionary or a string.
+
+### `download_file(file_id, path, filename=None)`
+
+Download a file from Pixeldrain synchronously.
+
+- Parameters:
+  - `file_id` (str): The ID of the file or a Pixeldrain URL.
+  - `path` (str): The local path to save the downloaded file.
+  - `filename` (str, optional): Name to save the file as (default is Pixeldrain filename).
+
+- Returns:
+  - `str`: The path to the downloaded file.
+
+### Asynchronous functions
+
+The asynchronous version of the library provides the same functionality but is designed for use with `asyncio` and `aiohttp` for non-blocking asynchronous operations.
+
+## Usage/Examples
 
 ### Synchronous Version
 
@@ -60,46 +101,6 @@ downloaded_file = await async_pixeldrain.download_file(file_id, download_path, f
 print(f"File downloaded to: {downloaded_file}")
 ```
 
-## Documentation
-
-### `get_info(file_id)`
-
-Get information about a file on Pixeldrain.
-
-- Parameters:
-  - `file_id` (str): The ID of the file.
-
-- Returns:
-  - `dict`: A dictionary containing file information.
-
-### `upload_file(file_path, returns=None, filename=None, api_key=None)`
-
-Upload a file to Pixeldrain synchronously.
-
-- Parameters:
-  - `file_path` (str): The path to the file to be uploaded.
-  - `returns` (str, optional): Specifies what to return.
-  - `filename` (str, optional): Name of the file to upload.
-  - `api_key` (str, optional): Pixeldrain API key for authorized uploads.
-
-- Returns:
-  - `dict` or `str`: Depending on the 'returns' parameter, returns a dictionary or a string.
-
-### `download_file(file_id, path, filename=None)`
-
-Download a file from Pixeldrain synchronously.
-
-- Parameters:
-  - `file_id` (str): The ID of the file or a Pixeldrain URL.
-  - `path` (str): The local path to save the downloaded file.
-  - `filename` (str, optional): Name to save the file as (default is Pixeldrain filename).
-
-- Returns:
-  - `str`: The path to the downloaded file.
-
-### Asynchronous functions
-
-The asynchronous version of the library provides the same functionality but is designed for use with `asyncio` and `aiohttp` for non-blocking asynchronous operations.
 
 ## Special Thanks
 
