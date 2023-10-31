@@ -1,0 +1,17 @@
+[project]
+name = "pixeldrain-reloaded-sliwka"
+version = "0.0.1"
+authors = [
+  { name="Sliwka"},
+]
+dependencies = [
+    "aiohttp",
+    "requests",
+]
+description = "Interact with pixeldrain using python synchronously and asynchronously!"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
