@@ -15,6 +15,9 @@ def get_info(file_id):
     Returns:
         dict: A dictionary containing file information.
     """
+    if "https://" in file_id:
+        file_id = file_id.strip("https://pixeldrain.com/u/")
+    
     return requests.get(f"https://pixeldrain.com/api/file/{file_id}/info").json()
 
 
