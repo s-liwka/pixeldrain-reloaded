@@ -1,17 +1,25 @@
 [project]
-name = "pixeldrain-reloaded-sliwka"
-version = "0.0.1"
+name = "pixeldrain-reloaded"
+version = "0.1"
 authors = [
-  { name="Sliwka"},
+  { name="Sliwka" },
 ]
 dependencies = [
     "aiohttp",
     "requests",
 ]
-description = "Interact with pixeldrain using python synchronously and asynchronously!"
+description = "Interact with Pixeldrain using Python Synchronously and Asynchronously!"
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers"
 ]
+[project.urls]
+"Homepage" = "https://github.com/s-liwka/pixeldrain-reloaded"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
