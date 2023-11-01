@@ -18,12 +18,16 @@ async def get_info(file_id):
     Returns:
         dict: A dictionary containing file information.
     """
-    if "https://" in file_id:
-        file_id = file_id.strip("https://pixeldrain.com/u/")
+    try:
+        if "https://" in file_id:
+            file_id = file_id.strip("https://pixeldrain.com/u/")
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(f"https://pixeldrain.com/api/file/{file_id}/info") as response:
-            return await response.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://pixeldrain.com/api/file/{file_id}/info") as response:
+                return await response.json()
+
+    except Exception as e:
+        return e
 
 
 # Upload a file to Pixeldrain
@@ -74,7 +78,7 @@ async def upload_file(file_path, returns: str=None, filename: str = None, api_ke
                     elif returns ==  'url':
                         return f"https://pixeldrain.com/u/{json.loads(await response.text())['id']}"
                     else:
-                        return "Invalid returns parameter. returns=<dict, verbose_dict, id, url> or None"
+                        return 'Invalid returns parameter. It must be dict, verbose_dict, id or url'
 
     except Exception as e:
         return e
@@ -108,6 +112,52 @@ async def download_file(file_id, path, filename: str = None):
             f.write(content)
 
         return os.path.join(path, filename)
+
+    except Exception as e:
+        return e
+
+
+async def get_thumbnail(file_id, returns_url: bool=False, width: int=None, height: int=None):
+    """
+    Returns a PNG thumbnail image representing the file. The thumbnail image will be 128x128 px by default.
+    The width and height parameters need to be a multiple of 16. Allowed values are 16, 32, 48, 64, 80, 96, 112, and 128. 
+    If a thumbnail cannot be generated for the file, you will be redirected to a mime type image of 128x128 px.
+
+    Parameters:
+        file_id (str): ID of the file to get a thumbnail for. If the file_id is a URL, it will be extracted.
+        returns_url (bool, optional): By default the function returns bytes, but you may specify it to return an URL to the thumbnail by setting this parameter to True.
+        width (int, optional): Width of the thumbnail image.
+        height (int, optional): Height of the thumbnail image.
+
+    Returns:
+        The function will return either bytes or URL depending on the returns parameter (default is bytes):
+            bytes/str: If a thumbnail can be generated, the PNG image bytes are returned.
+            bytes/str: If a thumbnail cannot be generated, a 301 redirect occurs to the URL of an image representing the type of the file.
+    """
+    try:
+        if "https://" in file_id:
+            file_id = file_id.strip("https://pixeldrain.com/u/")
+
+        t = f"https://pixeldrain.com/api/file/{file_id}/thumbnail"
+
+        params = {}
+        if width is not None:
+            params['width'] = width
+        if height is not None:
+            params['height'] = height
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(t, params=params) as response:
+                if response.status == 200:
+                    if returns_url:
+                        return response.url
+                    else:
+                        return await response.read()
+                elif response.status == 301:
+                    if returns_url:
+                        return response.url
+                    else:
+                        return await response.read()
 
     except Exception as e:
         return e
