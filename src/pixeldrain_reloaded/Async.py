@@ -3,6 +3,7 @@ import asyncio
 import os
 import base64
 import json
+import aiofiles
 
 url = "https://pixeldrain.com/api/file/"
 
@@ -108,8 +109,8 @@ async def download_file(file_id, path, filename: str = None):
             async with session.get(url + file_id) as response:
                 content = await response.read()
 
-        with open(os.path.join(path, filename), "wb") as f:
-            f.write(content)
+        async with aiofiles.open(os.path.join(path, filename), "wb") as f:
+            await f.write(content)
 
         return os.path.join(path, filename)
 
