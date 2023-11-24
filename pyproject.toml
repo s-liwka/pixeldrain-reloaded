@@ -1,12 +1,13 @@
 [project]
 name = "pixeldrain-reloaded"
-version = "0.1"
+version = "0.2"
 authors = [
   { name="Sliwka" },
 ]
 dependencies = [
     "aiohttp",
     "requests",
+    "aiofiles",
 ]
 description = "Interact with Pixeldrain using Python Synchronously and Asynchronously!"
 readme = "README.md"
