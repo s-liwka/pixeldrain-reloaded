@@ -154,8 +154,3 @@ async def get_thumbnail(file_id, returns_url: bool=False, width: int=None, heigh
 
     except Exception as e:
         raise Exception(f"Error while fetching the thumbnail: {e}")
-
-async def main():
-    print(await get_info("dfs"))
-
-asyncio.run(main())
