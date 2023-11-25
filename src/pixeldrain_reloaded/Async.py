@@ -28,48 +28,40 @@ async def get_info(file_id):
                 return await response.json()
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while getting file info: {e}")
 
 
-# Upload a file to Pixeldrain
-async def upload_file(file_path, returns: str=None, filename: str = None, api_key: str = None):
+async def upload_file(path, returns: str=None, filename: str=None, api_key: str=None):
     """
     Uploads a file to Pixeldrain asynchronously.
 
     Parameters:
-        file_path (str): The path to the file to be uploaded.
+        path (str): The path to the file to be uploaded.
         returns (str, optional): Specifies what to return.
             - None or 'dict': Returns a json response.
             - 'verbose_dict': Returns get_info() from the uploaded file.
             - 'id': Returns only the ID of the uploaded file.
             - 'url': Returns a ready-to-use URL to the uploaded file.
         filename (str, optional): Name of the file to upload.
-        filename (str, optional): Name of the file to upload.
         api_key (str, optional): Pixeldrain API key for authorized uploads.
-
     Returns:
         dict or str: Depending on the 'returns' parameter, returns a dictionary or a string.
     """
+
     if api_key is not None:
         headers = {
             "Authorization": "Basic " + base64.b64encode(f":{api_key}".encode()).decode(),
         }
+        params = {"name": filename if filename is not None else os.path.basename(path), "anonymous": "False"}
     else:
         headers = {}
+        params = {"name": filename if filename is not None else os.path.basename(path), "anonymous": "True"}
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            data = aiohttp.FormData()
-            data.add_field('file', open(file_path, 'rb'))
-            data.add_field('name', filename if filename is not None else os.path.basename(file_path))
-            data.add_field('anonymous', 'True' if api_key is None else 'False')
-
-            async with session.post(url, data=data, headers=headers) as response:
-                # it doesnt return a dict by default for some reason
-                try:
-                    return await response.json()
-
-                except aiohttp.ContentTypeError:
+    async with aiohttp.ClientSession() as session:
+        async with aiofiles.open(path, "rb") as f:
+            data = {"file": await f.read()}
+            async with session.post(url, params=params, data=data, headers=headers) as response:
+                if response.status == 201:
                     if returns == 'dict' or returns is None:
                         return json.loads(await response.text())
                     if returns == 'verbose_dict':
@@ -79,11 +71,9 @@ async def upload_file(file_path, returns: str=None, filename: str = None, api_ke
                     elif returns ==  'url':
                         return f"https://pixeldrain.com/u/{json.loads(await response.text())['id']}"
                     else:
-                        return 'Invalid returns parameter. It must be dict, verbose_dict, id or url'
-
-    except Exception as e:
-        return e
-
+                        return "Invalid returns parameter. returns=<dict, verbose_dict, id, url> or None"
+                else:
+                    raise Exception(f"Error uploading file. Status code: {response.status}")
 
 # Download a file from Pixeldrain
 async def download_file(file_id, path, filename: str = None):
@@ -115,7 +105,7 @@ async def download_file(file_id, path, filename: str = None):
         return os.path.join(path, filename)
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while downloading file: {e}")
 
 
 async def get_thumbnail(file_id, returns_url: bool=False, width: int=None, height: int=None):
@@ -159,6 +149,13 @@ async def get_thumbnail(file_id, returns_url: bool=False, width: int=None, heigh
                         return response.url
                     else:
                         return await response.read()
+                else:
+                    raise Exception(f"Error. Status code {response.status}")
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while fetching the thumbnail: {e}")
+
+async def main():
+    print(await get_info("dfs"))
+
+asyncio.run(main())
