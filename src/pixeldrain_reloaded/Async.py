@@ -44,6 +44,7 @@ async def upload_file(file_path, returns: str=None, filename: str = None, api_ke
             - 'id': Returns only the ID of the uploaded file.
             - 'url': Returns a ready-to-use URL to the uploaded file.
         filename (str, optional): Name of the file to upload.
+        filename (str, optional): Name of the file to upload.
         api_key (str, optional): Pixeldrain API key for authorized uploads.
 
     Returns:

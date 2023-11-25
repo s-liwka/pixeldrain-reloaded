@@ -1,6 +1,7 @@
 import requests
 import os
 import base64
+import aiofiles
 
 url = "https://pixeldrain.com/api/file/"
 
@@ -20,12 +21,13 @@ def get_info(file_id):
             file_id = file_id.strip("https://pixeldrain.com/u/")
         
         return requests.get(f"https://pixeldrain.com/api/file/{file_id}/info").json()
+
     except Exception as e:
-        return e
+        raise Exception(f"Error while getting file info: {e}")
 
 
 # Upload a file to Pixeldrain
-def upload_file(file_path, returns: str = None, filename: str = None, api_key=None):
+def upload_file(file_path, returns: str = None, filename: str = None, api_key: str=None):
     """
     Uploads a file to Pixeldrain synchronously.
 
@@ -75,7 +77,7 @@ def upload_file(file_path, returns: str = None, filename: str = None, api_key=No
             return 'Invalid returns parameter. It must be dict, verbose_dict, id or url'
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while uploading file: {e}")
 
 
 # Download a file from Pixeldrain
@@ -104,7 +106,7 @@ def download_file(file_id, path, filename: str = None):
         return os.path.join(path, filename)
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while downloading file: {e}")
 
 
 def get_thumbnail(file_id, returns_url: bool=False, width: int=None, height: int=None):
@@ -147,7 +149,9 @@ def get_thumbnail(file_id, returns_url: bool=False, width: int=None, height: int
             if returns_url:
                 return response.url
             else:
-                return response.content  
+                return response.content
+        else:
+            raise Exception(f"Status code {response.status}")
 
     except Exception as e:
-        return e
+        raise Exception(f"Error while fetching the thumbnail: {e}")
