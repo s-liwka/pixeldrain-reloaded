@@ -1,6 +1,6 @@
 [project]
 name = "pixeldrain-reloaded"
-version = "0.2"
+version = "0.2.1"
 authors = [
   { name="Sliwka" },
 ]
